@@ -1,0 +1,11 @@
+* {
+	background-color: #4092FE;
+    font-family: 'Quicksand';
+}
+
+header {
+    display: block;
+    border-bottom: 1px dotted #ccc;
+    
+}
+
