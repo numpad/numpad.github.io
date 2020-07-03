@@ -25,7 +25,13 @@
 				</nav>
 			</div>
 			<div class="row">
-				<img id="question" class="mb-3 img-fluid rounded"></img>
+				<img id="question-0" src="/public/image/q0.png" class="mb-3 question-img img-fluid rounded"></img>
+				<img id="question-1" src="/public/image/q1.png" class="mb-3 question-img img-fluid rounded" style="display:none;"></img>
+				<img id="question-2" src="/public/image/q2.png" class="mb-3 question-img img-fluid rounded" style="display:none;"></img>
+				<img id="question-3" src="/public/image/q3.png" class="mb-3 question-img img-fluid rounded" style="display:none;"></img>
+				<img id="question-4" src="/public/image/q4.png" class="mb-3 question-img img-fluid rounded" style="display:none;"></img>
+				<img id="question-5" src="/public/image/q5.png" class="mb-3 question-img img-fluid rounded" style="display:none;"></img>
+				<img id="question-6" src="/public/image/q6.png" class="mb-3 question-img img-fluid rounded" style="display:none;"></img>
 			</div>
 			<div class="row">
 				<button id="test-again-btn" style="display:none;" class="btn btn-primary btn-lg mt-md-1 mb-md-3 mx-auto" onclick="location.reload()">Test again</button>
@@ -60,7 +66,6 @@
 
 		<script>
 			var question_id = 0;
-			var container = $('#question');
 			var points = Array(20).fill(0).map(function (i) {
 				return {score: 0, fscore: 0}
 			});
@@ -150,7 +155,8 @@
 				question_id = n;
 				load_breadcrumbs(n);
 				
-				container.attr('src', '/public/image/q' + n + '.png');
+				$('.question-img').hide();
+				$('#question-' + n).show();
 				var q = questions[n];
 				
 				// update fields
