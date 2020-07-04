@@ -34,7 +34,7 @@
 				<img id="question-6" src="/public/image/q6.jpg" class="mb-3 w-100 question-img img-fluid rounded" style="display:none;"></img>
 			</div>
 			<div class="row">
-				<button id="test-again-btn" style="display:none;" class="btn btn-primary btn-lg mt-md-1 mb-md-3 mx-auto" onclick="location.reload()">Test again</button>
+				<button id="test-again-btn" style="display:none;" class="btn btn-primary btn-lg w-50 mt-md-1 mb-md-3 mx-auto" onclick="location.reload()">Test again</button>
 			</div>
 			<div class="row">
 				<div id="left-col" class="col-7">
@@ -177,7 +177,7 @@
 				if (n >= questions.length) return;
 				
 				question_id = n;
-				load_breadcrumbs(n);
+				load_breadcrumbs(n, true);
 				
 				$('.question-img').hide();
 				$('#question-' + n).show();
@@ -196,21 +196,22 @@
 				
 			}
 			
-			function load_breadcrumbs(current_question) {
+			function load_breadcrumbs(current_question, links) {
 				var nav = $('#breadcrumb-list');
 				nav.html('');
 				for (var i = 0; i < questions.length; ++i) {
+					var qname = questions[i].name;
+					if (!is_answered(i)) {
+						qname = '<b>' + qname + '</b>';
+					}
+					
 					if (i == current_question) {
-						if (is_answered(i)) {
-							nav.append('<li class="breadcrumb-item active" aria-current="page">' + questions[i].name + '</li>');
-						} else {
-							nav.append('<li class="breadcrumb-item active" aria-current="page"><b>' + questions[i].name + '</b></li>');
-						}
+						nav.append('<li class="breadcrumb-item active" aria-current="page">' + qname + '</li>');
 					} else {
-						if (is_answered(i)) {
-							nav.append('<li class="breadcrumb-item"><a href="#" onclick="load_question(' + i + ');">' + questions[i].name + '</a></li>');
+						if (links) {
+							nav.append('<li class="breadcrumb-item"><a href="javascript:load_question(' + i + ');">' + qname + '</a></li>');
 						} else {
-							nav.append('<li class="breadcrumb-item"><a href="#" onclick="load_question(' + i + ');"><b>' + questions[i].name + '</b></a></li>');
+							nav.append('<li class="breadcrumb-item"><a href="javascript:void(0)">' + qname + '</a></li>');
 						}
 					}
 				}
@@ -254,7 +255,7 @@
 				var points = get_points();
 				var answers = get_answer_count();
 				var max_points = (points.reduce((a, b) => { return Math.max(a, b); }) / answers);
-				
+
 				for (var i = 0; i < killernames.length; ++i) {
 					var result = points[i] / answers;
 					var colors = ['bg-danger', 'bg-warning', 'bg-info', 'bg-success'];
@@ -290,7 +291,9 @@
 					$('#left-col').addClass('col');
 					$('.result-bar').removeClass('progress-bar-animated');
 					$('#test-again-btn').show();
-					$('#question-title').text('Your results')
+					$('#question-title').text('Your results');
+					$('.question-img').hide();
+					load_breadcrumbs(question_id, false);
 				}
 			});
 		</script>
