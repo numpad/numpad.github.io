@@ -19,7 +19,7 @@
 	</head>
 	<body>
 		<div class="container">
-			<div class="mt-md-3 shadow-sm">
+			<div class="mt-md-3">
 				<nav aria-label="breadcrumb">
 					<ol class="breadcrumb" id="breadcrumb-list"></ol>
 				</nav>
@@ -58,7 +58,7 @@
 					</div>
 					<hr class="answer-hide">
 					<div class="row">
-						<button id="skip-btn" class="answer-hide col btn btn-link" onclick="load_question(++question_id)">Skip</button>
+						<button id="skip-btn" class="answer-hide col btn btn-link" onclick="if (question_id < questions.length - 1) load_question(++question_id)">Skip</button>
 					</div>
 				</div>
 			</div>
@@ -75,10 +75,6 @@
 		</footer>
 		<script>
 			var question_id = 0;
-			var points = Array(20).fill(0).map(function (i) {
-				return {score: 0, fscore: 0}
-			});
-			
 			var point_history = Array(7).fill(Array(20).fill(0));
 
 			var question_url = 'https://youtu.be/nflN137VU5g?t=';
@@ -93,10 +89,13 @@
 				c++;
 				return k <= c ? (k/c) : 0;
 			};
+			var cmp_dist = (k, c) => {
+				return 1 - (Math.abs(k-c)/4);
+			};
 			
 			var questions = [
 				{
-					'name':    'Strength',
+					'name':    'Viability',
 					'link':    '75',
 					'answers': ['Very strong', 'Quite strong', 'Average', 'Underwhelming'],
 					'killers': [
@@ -104,7 +103,7 @@
 						1, 2, 0, 2, 2, 0, 1, 1,
 						2, 0, 3, 3,
 					],
-					'cmp': cmp_less,
+					'cmp': cmp_dist,
 				},
 				{
 					'name': 'Playstyle',
@@ -129,7 +128,7 @@
 					'cmp': cmp_eq,
 				},
 				{
-					'name': 'Addons',
+					'name': 'Addon reliance',
 					'answers': ['Fun and/or strong add-ons', 'No reliance on add-ons', 'Weak/average add-ons', 'Add-on dependant'],
 					'link': '538',
 					'killers': [
@@ -162,7 +161,7 @@
 					'cmp': cmp_eq,
 				},
 				{
-					'name': 'Skill-cap',
+					'name': 'Skill type',
 					'answers': ['High mechanical skill', 'Knowledge-based skill', 'Average skill-cap'],
 					'link': '1199',
 					'killers': [
@@ -175,7 +174,7 @@
 			];
 			
 			function load_question(n) {
-				if (n > 6) return;
+				if (n >= questions.length) return;
 				
 				question_id = n;
 				load_breadcrumbs(n);
